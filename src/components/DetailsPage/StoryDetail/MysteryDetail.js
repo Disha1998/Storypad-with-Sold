@@ -36,27 +36,41 @@ function MysteryDetail() {
             query.equalTo("objectId", (params.id).toString());
             const object = await query.first();
             const element = object.attributes;
-            console.log(element, 'ele');
+            const general_access = element.general_access;
+            const nftholder_access = element.nftholder_access;
+            const holder_price = element.holder_price;
+            const Nonholder_price = element.Nonholder_price;
+            const token = element.token
+
             axios.get(`https://dweb.link/ipfs/${object.attributes.CID}/story.json`)
                 .then(function (response) {
+                    console.log(response, 'res');
                     if (response.data.walletAddress) {
                         let wall = response.data.walletAddress;
 
                         b.map((e) => {
                             let tokAdd = e.tokenContractAddress;
                             if (wall == e.CurrentUser) {
-                                var newData = { ...response.data, element, tokAdd }
+                                var newData = { ...response.data, element, tokAdd, general_access, nftholder_access, holder_price, Nonholder_price, token }
                                 console.log(newData, 'new data');
                                 setStoryDetails(newData)
+                                console.log(setStoryDetails(newData), '-----newww');
+
                             }
                         })
                     }
+                    console.log(storyDetails, '------story');
+
                 })
         }
     }
+    console.log(storyDetails, '------story');
+
+    // function readfull() {
+    // setReadFullStory(true);
+    // }
 
 
-    console.log(storyDetails, 'story');
     return (
         // <div></div>
 
@@ -70,12 +84,18 @@ function MysteryDetail() {
             <h6 className="story-content">
 
                 <p>{storyDetails.description}</p>
-                <ModalContribute
-                    setReadFullStory={setReadFullStory}
-                    e={storyDetails}
-                >
 
-                </ModalContribute>
+                {
+                    storyDetails.general_access && storyDetails.nftholder_access == 2 ? (
+                        <ModalContribute
+                            setReadFullStory={setReadFullStory}
+                            e={storyDetails}
+                        >
+                        </ModalContribute>
+                    ) : <p>{storyDetails.content}</p>
+
+                }
+
 
                 <p>{readFullStory ? storyDetails.content : ""}</p>
 

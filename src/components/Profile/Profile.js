@@ -66,8 +66,8 @@ function Profile() {
         max = max || 15; var len = str.length; if (len > max) { sep = sep || "..."; var seplen = sep.length; if (seplen > max) { return str.substr(len - max) } var n = -0.5 * (max - len - seplen); var center = len / 2; return str.substr(0, center - n) + sep + str.substr(len - center + n); } return str;
     }
     return (
-        <div className="app-container">
-            <div className="profile-layout">
+        <div className="app-container ">
+            <div className="profile-layout ">
                 <header className="background background-lg" style={{ backgroundColor: "#4b2caa" }}>
                     <div className="avatar avatar-profile center-block">
                         <Avatar name="Foo Bar" round={true} />
@@ -82,7 +82,7 @@ function Profile() {
                 storyData && storyData.map((sData) => {
                     if(sData.walletAddress == localStorage.getItem('currentUserAddress')){
                         return (
-                            <div className="card mb-3 offset-4 cardSec" style={{ maxWidth: "540px", marginTop: "55px", marginBottom: "5rem" }}>
+                            <div className="card mb-3 offset-4 cardSec " style={{ maxWidth: "540px", marginTop: "55px", marginBottom: "5rem" }}>
                                 <div className="row no-gutters">
                                     <div className="col-md-12 mt-2 mb-2 panel-title">
                                         {/* <div className="">Story by : {user && truncate(user.attributes.ethAddress)}</div> */}

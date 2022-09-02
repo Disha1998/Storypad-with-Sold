@@ -44,7 +44,7 @@ function HorrorDetail() {
 
             axios.get(`https://dweb.link/ipfs/${object.attributes.CID}/story.json`)
                 .then(function (response) {
-                    console.log(response,'res');
+                    console.log(response, 'res');
                     if (response.data.walletAddress) {
                         let wall = response.data.walletAddress;
 
@@ -54,17 +54,20 @@ function HorrorDetail() {
                                 var newData = { ...response.data, element, tokAdd, general_access, nftholder_access, holder_price, Nonholder_price, token }
                                 console.log(newData, 'new data');
                                 setStoryDetails(newData)
-                        
+                                console.log(setStoryDetails(newData), '-----newww');
+
                             }
                         })
                     }
+                    console.log(storyDetails, '------story');
+
                 })
         }
     }
-    console.log(storyDetails, 'story');
+    console.log(storyDetails, '------story');
 
     // function readfull() {
-        // setReadFullStory(true);
+    // setReadFullStory(true);
     // }
 
 
@@ -82,17 +85,17 @@ function HorrorDetail() {
 
                 <p>{storyDetails.description}</p>
 
-            {
-                storyDetails.general_access && storyDetails.nftholder_access == 2 ? (
-                    <ModalContribute
-                    setReadFullStory={setReadFullStory}
-                    e={storyDetails}
-                >
-                </ModalContribute>
-                ) :                                                  <p>{storyDetails.content}</p>
+                {
+                    storyDetails.general_access && storyDetails.nftholder_access == 2 ? (
+                        <ModalContribute
+                            setReadFullStory={setReadFullStory}
+                            e={storyDetails}
+                        >
+                        </ModalContribute>
+                    ) : <p>{storyDetails.content}</p>
 
-            }
-            
+                }
+
 
                 <p>{readFullStory ? storyDetails.content : ""}</p>
 

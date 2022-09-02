@@ -8,6 +8,8 @@ import ContractABI from "../../abi/mintContractParent.json";
 import ContractChildABI from "../../abi/mintContract.json";
 import { ethers } from "ethers";
 import web3 from "web3";
+
+
 function NftReadershipDetail() {
   const { address } = useParams()
   console.log(address, 'address in NFT detail');
@@ -96,7 +98,7 @@ function NftReadershipDetail() {
     // let transactionApprove = await childContract.approve(,  parseInt(tokenID.toString()));
     // let txa = transactionApprove.wait();
     await storyMintContract.callPurchaseItem(parseInt(tokenID), tokenAddress, { value: ethers.utils.parseUnits(price.toString(), "ether"), })
-
+    
     solditems.set("tokenAddress", tokenAddress);
     solditems.set("tokenId", tokenID);
     solditems.save();
