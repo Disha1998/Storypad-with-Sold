@@ -12,6 +12,9 @@ import { EditorState, convertToRaw, ContentState } from 'draft-js';
 // import RichTextEditor from 'react-rte';
 import { ToastContainer, toast } from 'react-toastify';
 import "react-toastify/dist/ReactToastify.css";
+import { NotificationContext } from '../Context/Notification'
+import EpnsSDK from "@epnsproject/backend-sdk-staging"
+
 
 
 const axios = require('axios');
@@ -24,6 +27,12 @@ function UploadForm() {
     const { addData, storeFiles, storeFile, Image } = bookContext;
     const API_Token = process.env.REACT_APP_WEB3STORAGE_TOKEN;
     const { Moralis, account, user, isAuthenticated } = useMoralis();
+
+    // notification...
+    // const notificationContext = React.useContext(NotificationContext);
+    // const { sendNotifications } = notificationContext;
+
+    // 
 
     const [AuthorName, setAuthorName] = useState('')
     const [name, setName] = useState('');
@@ -38,6 +47,55 @@ function UploadForm() {
     const [discount, setDiscount] = useState(undefined);
     const [Token, setToken] = useState("");
     const [loading, setLoading] = useState(false);
+
+    // epns trial
+
+    // new EpnsSDK(
+    //     channelKey = process.env.REACT_APP_EPNS_PRIVATE_KEY,
+    //     {
+    //         communicatorContractAddress =config.communicatorContractAddress,
+    //         communicatorContractABI = config.communicatorContractABI,
+    //         channelAddress = null,
+    //         networkKeys = DEFAULT_NETWORK_SETTINGS,
+    //         notificationChainId = DEFAULT_NOTIFICATION_CHAIN,
+    //     } = {}
+    // )
+
+    const subscribers =   epnsSdk.getSubscribedUsers();
+
+
+    // epns trial
+
+
+    // notification---EPNS-------
+
+    const CHANNEL_PK = process.env.REACT_APP_EPNS_PRIVATE_KEY
+    console.log(CHANNEL_PK);
+
+    const Pkey = `0x${CHANNEL_PK}`;
+    const epnsSdk = new EpnsSDK(Pkey);
+
+    console.log(epnsSdk, '---epnsSdk');
+
+    async function SendtoEPNS() {
+        const response = await epnsSdk.sendNotification(
+            localStorage.getItem("currentUserAddress"),
+            "Hey from Storypad-MUMBAI-Code",
+            "D is sending you from sdk....",
+            "Published Story",
+            "Book is published successgully....!",
+            3, //this is the notificationType
+            "", // a url for users to be redirected to
+            "",// an image url, or an empty string
+            null, //this can be left as null
+        );
+        console.log({
+            response,
+            message: "Your notification has been sucesfully sent"
+        });
+    }
+
+    // notification-----EPNS-----
 
 
     const [description, setDescription] = useState(
@@ -103,6 +161,8 @@ function UploadForm() {
         e.preventDefault()
         setLoading(true)
         await storeFiles(Item)
+        await SendtoEPNS()
+
 
         // addData();
         setAuthorName('');
@@ -261,7 +321,11 @@ function UploadForm() {
                     </button>
 
                 </form>
+
+                {/* <button value={notification} onClick={NotificationEvent}> noteeeeeee</button> */}
+
             </div>
+
         </div>
     )
 }

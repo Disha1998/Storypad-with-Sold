@@ -13,6 +13,8 @@ import { useParams } from 'react-router-dom';
 import { ethers } from "ethers";
 import ChildContractAbi from "../../abi/mintContract.json"
 import web3 from "web3";
+import EpnsSDK from "@epnsproject/backend-sdk-staging"
+
 
 
 export default function ModalContribute(props) {
@@ -21,7 +23,7 @@ export default function ModalContribute(props) {
   const params = useParams();
   const API_Token = process.env.REACT_APP_WEB3STORAGE_TOKEN;
   const client = new Web3Storage({ token: API_Token })
-  const [buyTitle,setBuyTitle] = useState("");
+  const [buyTitle, setBuyTitle] = useState("");
 
   const reviews = Moralis.Object.extend("Reviews");
 
@@ -36,7 +38,7 @@ export default function ModalContribute(props) {
 
     } else {
       setPrice(props.e.element.Nonholder_price);
-      setBuyTitle("Your Offered Price !!")  
+      setBuyTitle("Your Offered Price !!")
     }
   }
   console.log(props.e.tokAdd, 'token------');
@@ -46,11 +48,43 @@ export default function ModalContribute(props) {
   const handleClickOpen = (result) => {
     // PriceSet(result);
     setOpen(true);
-   
+
   };
   const handleClose = () => {
     setOpen(false);
   };
+
+
+  // notification---EPNS-------
+
+  const CHANNEL_PK = process.env.REACT_APP_EPNS_PRIVATE_KEY
+  console.log(CHANNEL_PK);
+
+  const Pkey = `0x${CHANNEL_PK}`;
+  const epnsSdk = new EpnsSDK(Pkey);
+
+  console.log(epnsSdk, '---epnsSdk');
+
+  async function SendtoEPNS() {
+    const response = await epnsSdk.sendNotification(
+      localStorage.getItem("currentUserAddress"),
+      "  Buy Storypad-MUMBAI-Code",
+      "Buy stories from storypad....",
+      "Buy Story ",
+      "Story is purchased successgully....!",
+      3, //this is the notificationType
+      "", // a url for users to be redirected to
+      "",// an image url, or an empty string
+      null, //this can be left as null
+    );
+    console.log({
+      response,
+      message: "Your notification has been sucesfully sent"
+    });
+  }
+
+  // notification-----EPNS-----
+
 
   async function onAddClick(e) {
     e.preventDefault();
@@ -64,6 +98,8 @@ export default function ModalContribute(props) {
       var buyBTN = document.getElementById("buy-story-detailPage")
       buyBTN.style.display = "none"
     }
+    await SendtoEPNS()
+
   }
 
   const TransferEth = async () => {
@@ -75,7 +111,7 @@ export default function ModalContribute(props) {
       contractAddress: "0x0000000000000000000000000000000000001010",
     }
     let result = await Moralis.transfer(options);
-     console.log(result, '----result in TransferEth ');
+    console.log(result, '----result in TransferEth ');
     let tx = result.wait();
     console.log(tx, 'tx -----');
     return tx;
@@ -104,9 +140,9 @@ export default function ModalContribute(props) {
     <div style={{ display: "contents" }}>
       <button type="button" id='buy-story-detailPage' onClick={async () => {
         await getTokenBalance();
-  handleClickOpen();
-      }} 
-      class="btn btn-outline-danger buy-story-btn">Buy Story</button>
+        handleClickOpen();
+      }}
+        class="btn btn-outline-danger buy-story-btn">Buy Story</button>
 
       <Dialog style={{ widht: "400px" }} open={open} onClose={handleClose}>
         <DialogTitle>Buy Story</DialogTitle>
@@ -115,7 +151,7 @@ export default function ModalContribute(props) {
 
           <h3>
             {buyTitle}
-            
+
           </h3>
 
           <TextField

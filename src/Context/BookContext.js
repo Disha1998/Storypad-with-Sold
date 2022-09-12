@@ -10,10 +10,15 @@ import jsPDF from "jspdf";
 import { ToastContainer, toast } from 'react-toastify';
 import "react-toastify/dist/ReactToastify.css";
 
+
 export const BookContext = createContext();
 export const BookContextProvider = (props) => {
     const [Image, setImage] = useState();
     const [pdf, setPdf] = useState('');
+    const [accounts, setAccount] = useState('');
+    const [address, setAddress] = useState('');
+
+
     // const [loading, setLoading] = useState(false);
 
 
@@ -28,6 +33,20 @@ export const BookContextProvider = (props) => {
     const Storypad = Moralis.Object.extend("StoryPadBuildit");
     const StoryPad = new Storypad();
     const { authenticate, isAuthenticated, isInitialized } = useMoralis()
+
+
+
+
+
+
+    useEffect(() => {
+        if (isAuthenticated) {
+            setAccount(account);
+        }
+        // checkIfWalletIsConnected();
+    }, [isAuthenticated, account]);
+
+
 
 
     function addData(Item) {
@@ -94,67 +113,93 @@ export const BookContextProvider = (props) => {
 
                 .catch(function (error) {
                 });
-            // setLoading(false);
 
-        }
+            // const accounts = await ethereum.request({ method: 'eth_accounts' });
+
+            // if (accounts.length !== 0) {
+            //     const account = accounts[0];
+            //     console.log("Found an authorized account: ", account);
+
+            //     // Switch network if it's not the correct chain
+            //     try {
+            //         await ethereum.request({
+            //             method: "wallet_switchEthereumChain",
+            //             params: [{ chainId: POLYGON.chainId }],
+            //         });
+            //         setAddress(accounts[0]);
+            //     } catch (err) {
+            //         console.log(err);
+            //     }
+
+            // } else {
+            //     console.log("No authorized account found");
+            // }
+        // } ;
+
+
+
+
+        // setLoading(false);
+
     }
+}
 
-    // async function getStoryDetails(params) {
-    //     // console.log("params----------", params);
+// async function getStoryDetails(params) {
+//     // console.log("params----------", params);
 
-    //     if (isAuthenticated) {
-    //         const archives = Moralis.Object.extend("StoryPadBuildit");
-    //         const query = new Moralis.Query(archives);
-    //         query.equalTo("objectId", (params.id).toString());
-    //         const object = await query.first();
-    //         console.log(object,'obj in context---');
-    //         axios.get(`https://dweb.link/ipfs/${object.attributes.CID}/story.json`)
-    //             .then(function (response) {
-    //                 setStoryDetails(response.data)  
-    //             })
-    //             .catch(function (error) {
+//     if (isAuthenticated) {
+//         const archives = Moralis.Object.extend("StoryPadBuildit");
+//         const query = new Moralis.Query(archives);
+//         query.equalTo("objectId", (params.id).toString());
+//         const object = await query.first();
+//         console.log(object,'obj in context---');
+//         axios.get(`https://dweb.link/ipfs/${object.attributes.CID}/story.json`)
+//             .then(function (response) {
+//                 setStoryDetails(response.data)  
+//             })
+//             .catch(function (error) {
 
-    //             })
-    //     }
-    // }
-
-
-    // ------------MAHIMA'CODE
-
-    async function storeFile(file) {
-        const ext = file.name.split('.').pop();
-
-        const fileName = `${uuidv4()}.${ext}`;
-        const newFile = new File([file], fileName, { type: file.type });
-        const cid = await client.put([newFile], {
-            name: fileName,
-        });
-        const imageURI = `https://${cid}.ipfs.dweb.link/${fileName}`;
-        setImage(imageURI);
-
-        return imageURI;
-    }
+//             })
+//     }
+// }
 
 
+// ------------MAHIMA'CODE
 
-    return (
-        <BookContext.Provider
-            value={{
-                addData,
-                storeFiles,
-                // getStoryDetails,
-                storyD,
-                // storyDetails,
-                login,
-                storeFile,
-                Image,
-                fetch,
+async function storeFile(file) {
+    const ext = file.name.split('.').pop();
+
+    const fileName = `${uuidv4()}.${ext}`;
+    const newFile = new File([file], fileName, { type: file.type });
+    const cid = await client.put([newFile], {
+        name: fileName,
+    });
+    const imageURI = `https://${cid}.ipfs.dweb.link/${fileName}`;
+    setImage(imageURI);
+
+    return imageURI;
+}
 
 
 
-            }}
-        >
-            {props.children}
-        </BookContext.Provider>
-    );
+return (
+    <BookContext.Provider
+        value={{
+            addData,
+            storeFiles,
+            // getStoryDetails,
+            storyD,
+            // storyDetails,
+            login,
+            storeFile,
+            Image,
+            fetch,
+
+
+
+        }}
+    >
+        {props.children}
+    </BookContext.Provider>
+);
 }

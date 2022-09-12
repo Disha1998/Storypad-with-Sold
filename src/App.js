@@ -15,6 +15,8 @@ import Footer from './components/Footer';
 // import NewsDetail from './components/DetailsPage/NewsDetail';
 // import WebsiteDetail from './components/DetailsPage/WebsiteDetail';
 import Profile from './components/Profile/Profile';
+import Notification from './Context/Notification';
+
 import UploadFormNft from './components/UploadFormNft';
 //Listing
 import Fantasy from './components/ListingPage/StoryPadList/Fantasy';
@@ -45,6 +47,7 @@ import FanfictionDetail from './components/DetailsPage/StoryDetail/FanfictionDet
 
 import NftReadership from './components/NftReadership/NftReadershipList'
 import NftReadershipDetail from './components/NftReadershipDetail/NftReadershipDetail'
+// import Notification from './Context/Notification';
 
 
 function App() {
@@ -65,6 +68,8 @@ function App() {
         <Route path="/newspapers-list" element={<NewspaperList />} />
         <Route path="/websites-list" element={<WebsiteList />} /> */}
         <Route path="/profile" element={<Profile />} />
+        <Route path="/notification" element={<Notification />} />
+
         <Route path="/nft-upload" element={<UploadFormNft />} />
 
         {/* Storypad List */}
