@@ -1,7 +1,8 @@
 import React from 'react';
-import ReactDOM from 'react-dom/client';
+// import ReactDOM from 'react-dom/client';
 import './index.css';
 import App from './App';
+import ReactDOM from 'react-dom';
 import reportWebVitals from './reportWebVitals';
 import { MoralisProvider } from 'react-moralis';
 import { BrowserRouter } from 'react-router-dom';
@@ -9,23 +10,25 @@ import { BookContextProvider } from './Context/BookContext';
 import 'react-toastify/dist/ReactToastify.css';
 
 
+// const root = ReactDOM.createRoot(document.getElementById("root"));
+// const root = document.getElementById("root");
+// const serverUrl = process.env.REACT_APP_MORALIS_SERVER;
+// const appId = process.env.REACT_APP_MORALIS_KEY;
+ReactDOM.render(
 
+  <MoralisProvider appId={process.env.REACT_APP_MORALIS_KEY} serverUrl={process.env.REACT_APP_MORALIS_SERVER}>
+    <BookContextProvider>
+      <BrowserRouter>
+        <React.StrictMode>
 
+          <App />
+        </React.StrictMode>
 
-const root = ReactDOM.createRoot(document.getElementById("root"));
-const serverUrl=process.env.REACT_APP_MORALIS_SERVER;
-const appId=process.env.REACT_APP_MORALIS_KEY;
-root.render(
-  
-  <MoralisProvider appId= {appId} serverUrl={serverUrl}>
-  <BookContextProvider>
-  <BrowserRouter>
-  <App />
-
-    </BrowserRouter>
+      </BrowserRouter>
     </BookContextProvider>
-    </MoralisProvider>,
-   
+  </MoralisProvider>,
+  document.getElementById('root')
+
 );
 
 
@@ -33,3 +36,21 @@ root.render(
 // to log results (for example: reportWebVitals(console.log))
 // or send to an analytics endpoint. Learn more: https://bit.ly/CRA-vitals
 reportWebVitals();
+
+// import React from 'react';
+// import ReactDOM from 'react-dom';
+// import './index.css';
+// import App from './App';
+// import reportWebVitals from './reportWebVitals';
+// import { BrowserRouter } from 'react-router-dom';
+
+// import 'bootstrap/dist/css/bootstrap.min.css';
+
+// ReactDOM.render(
+//   <React.StrictMode>
+//     <BrowserRouter>
+//       <App />
+//     </BrowserRouter>
+//   </React.StrictMode>,
+//   document.getElementById('root')
+// );

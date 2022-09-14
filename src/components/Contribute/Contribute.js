@@ -14,11 +14,13 @@ import { ethers } from "ethers";
 import ChildContractAbi from "../../abi/mintContract.json"
 import web3 from "web3";
 import EpnsSDK from "@epnsproject/backend-sdk-staging"
+import * as EpnsAPI from "@epnsproject/sdk-restapi"
+// import { ethers } from 'ethers'
 
 
 
 export default function ModalContribute(props) {
-  const { Moralis } = useMoralis();
+  const { Moralis, account, user, isAuthenticated } = useMoralis();
   console.log(props.e, 'e in Modal')
   const params = useParams();
   const API_Token = process.env.REACT_APP_WEB3STORAGE_TOKEN;
@@ -59,33 +61,20 @@ export default function ModalContribute(props) {
 
   const CHANNEL_PK = process.env.REACT_APP_EPNS_PRIVATE_KEY
   console.log(CHANNEL_PK);
+  const signer = new ethers.Wallet(CHANNEL_PK);
+
 
   const Pkey = `0x${CHANNEL_PK}`;
   const epnsSdk = new EpnsSDK(Pkey);
 
   console.log(epnsSdk, '---epnsSdk');
 
-  async function SendtoEPNS() {
-    const response = await epnsSdk.sendNotification(
-      localStorage.getItem("currentUserAddress"),
-      "  Buy Storypad-MUMBAI-Code",
-      "Buy stories from storypad....",
-      "Buy Story ",
-      "Story is purchased successgully....!",
-      3, //this is the notificationType
-      "", // a url for users to be redirected to
-      "",// an image url, or an empty string
-      null, //this can be left as null
-    );
-    console.log({
-      response,
-      message: "Your notification has been sucesfully sent"
-    });
-  }
-
-  // notification-----EPNS-----
+  let cUser = user && user?.attributes?.ethAddress;
+  console.log('cUser------', cUser);
+ 
 
 
+  
   async function onAddClick(e) {
     e.preventDefault();
     setLoading(true)
@@ -98,7 +87,34 @@ export default function ModalContribute(props) {
       var buyBTN = document.getElementById("buy-story-detailPage")
       buyBTN.style.display = "none"
     }
-    await SendtoEPNS()
+    // await SendtoEPNS()
+    const response = await EpnsAPI.payloads.sendNotification({
+      signer,
+      type: 3, // target
+      identityType: 2, // direct payload
+      notification: {
+        title: `2 Buy Story!`,
+        body: `Purchased  Story successfully...!!`,
+      },
+      payload: {
+        title: `2 Buy Story!`,
+        body: `Purchased  Story successfully...!!`,
+        cta: '',
+        img: ''
+      },
+      recipients: `eip155:80001:${user && user?.attributes?.ethAddress}`,
+
+      // recipient address
+
+      channel: 'eip155:80001:0x0630ba2dE07892EA340e9b9Bc07a35Ef3c4F5F9B', // your channel address
+      env: 'staging'
+    });
+    console.log({
+      response,
+      message: "Your notification has been sucesfully sent"
+    });
+
+
 
   }
 

@@ -140,7 +140,7 @@ function Header() {
 
             <div>
               <Button aria-describedby={id} onClick={handleClick}>
-                <BellIcon width='50' height='30' active={true} animate={true} />
+                <BellIcon width='50' height='30' active={true} animate={false} />
               </Button>
               <Popover
                 id={id}

@@ -22,7 +22,7 @@ export const BookContextProvider = (props) => {
     // const [loading, setLoading] = useState(false);
 
 
-    const { Moralis, user, account } = useMoralis();
+    const { Moralis, user, account, authenticate, isAuthenticated, isInitialized } = useMoralis();
     const { data, fetch } = useMoralisQuery("StoryPadBuildit");
     const storyD = data;
     // console.log(data, ' ====');
@@ -32,7 +32,6 @@ export const BookContextProvider = (props) => {
     const client = new Web3Storage({ token: API_Token })
     const Storypad = Moralis.Object.extend("StoryPadBuildit");
     const StoryPad = new Storypad();
-    const { authenticate, isAuthenticated, isInitialized } = useMoralis()
 
 
 
@@ -102,6 +101,7 @@ export const BookContextProvider = (props) => {
         if (!isAuthenticated) {
             await authenticate({
                 provider: "web3Auth",
+                chainId: Moralis.Chains.POLYGON_MUMBAI,
                 clientId: "BHQlt53J8Q_CprFI9tgx5aRB7pE9Ei0ccchzXQBNIYAI4RwdZ84Y2sVGoezEZ3S_kwwt3MuZ2eZIGoTYET--4I0",
 
             })
@@ -134,72 +134,72 @@ export const BookContextProvider = (props) => {
             // } else {
             //     console.log("No authorized account found");
             // }
-        // } ;
+            // } ;
 
 
 
 
-        // setLoading(false);
+            // setLoading(false);
 
+        }
     }
-}
 
-// async function getStoryDetails(params) {
-//     // console.log("params----------", params);
+    // async function getStoryDetails(params) {
+    //     // console.log("params----------", params);
 
-//     if (isAuthenticated) {
-//         const archives = Moralis.Object.extend("StoryPadBuildit");
-//         const query = new Moralis.Query(archives);
-//         query.equalTo("objectId", (params.id).toString());
-//         const object = await query.first();
-//         console.log(object,'obj in context---');
-//         axios.get(`https://dweb.link/ipfs/${object.attributes.CID}/story.json`)
-//             .then(function (response) {
-//                 setStoryDetails(response.data)  
-//             })
-//             .catch(function (error) {
+    //     if (isAuthenticated) {
+    //         const archives = Moralis.Object.extend("StoryPadBuildit");
+    //         const query = new Moralis.Query(archives);
+    //         query.equalTo("objectId", (params.id).toString());
+    //         const object = await query.first();
+    //         console.log(object,'obj in context---');
+    //         axios.get(`https://dweb.link/ipfs/${object.attributes.CID}/story.json`)
+    //             .then(function (response) {
+    //                 setStoryDetails(response.data)  
+    //             })
+    //             .catch(function (error) {
 
-//             })
-//     }
-// }
-
-
-// ------------MAHIMA'CODE
-
-async function storeFile(file) {
-    const ext = file.name.split('.').pop();
-
-    const fileName = `${uuidv4()}.${ext}`;
-    const newFile = new File([file], fileName, { type: file.type });
-    const cid = await client.put([newFile], {
-        name: fileName,
-    });
-    const imageURI = `https://${cid}.ipfs.dweb.link/${fileName}`;
-    setImage(imageURI);
-
-    return imageURI;
-}
+    //             })
+    //     }
+    // }
 
 
+    // ------------MAHIMA'CODE
 
-return (
-    <BookContext.Provider
-        value={{
-            addData,
-            storeFiles,
-            // getStoryDetails,
-            storyD,
-            // storyDetails,
-            login,
-            storeFile,
-            Image,
-            fetch,
+    async function storeFile(file) {
+        const ext = file.name.split('.').pop();
+
+        const fileName = `${uuidv4()}.${ext}`;
+        const newFile = new File([file], fileName, { type: file.type });
+        const cid = await client.put([newFile], {
+            name: fileName,
+        });
+        const imageURI = `https://${cid}.ipfs.dweb.link/${fileName}`;
+        setImage(imageURI);
+
+        return imageURI;
+    }
 
 
 
-        }}
-    >
-        {props.children}
-    </BookContext.Provider>
-);
+    return (
+        <BookContext.Provider
+            value={{
+                addData,
+                storeFiles,
+                // getStoryDetails,
+                storyD,
+                // storyDetails,
+                login,
+                storeFile,
+                Image,
+                fetch,
+
+
+
+            }}
+        >
+            {props.children}
+        </BookContext.Provider>
+    );
 }

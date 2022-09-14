@@ -14,10 +14,11 @@ import { ToastContainer, toast } from 'react-toastify';
 import "react-toastify/dist/ReactToastify.css";
 import { NotificationContext } from '../Context/Notification'
 import EpnsSDK from "@epnsproject/backend-sdk-staging"
+import * as EpnsAPI from "@epnsproject/sdk-restapi"
+import { ethers } from 'ethers'
 
 
 
-const axios = require('axios');
 
 function UploadForm() {
 
@@ -48,52 +49,55 @@ function UploadForm() {
     const [Token, setToken] = useState("");
     const [loading, setLoading] = useState(false);
 
-    // epns trial
-
-    // new EpnsSDK(
-    //     channelKey = process.env.REACT_APP_EPNS_PRIVATE_KEY,
-    //     {
-    //         communicatorContractAddress =config.communicatorContractAddress,
-    //         communicatorContractABI = config.communicatorContractABI,
-    //         channelAddress = null,
-    //         networkKeys = DEFAULT_NETWORK_SETTINGS,
-    //         notificationChainId = DEFAULT_NOTIFICATION_CHAIN,
-    //     } = {}
-    // )
-
-    const subscribers =   epnsSdk.getSubscribedUsers();
 
 
-    // epns trial
 
 
     // notification---EPNS-------
 
+
     const CHANNEL_PK = process.env.REACT_APP_EPNS_PRIVATE_KEY
     console.log(CHANNEL_PK);
+    const signer = new ethers.Wallet(CHANNEL_PK);
+
 
     const Pkey = `0x${CHANNEL_PK}`;
     const epnsSdk = new EpnsSDK(Pkey);
 
     console.log(epnsSdk, '---epnsSdk');
 
-    async function SendtoEPNS() {
-        const response = await epnsSdk.sendNotification(
-            localStorage.getItem("currentUserAddress"),
-            "Hey from Storypad-MUMBAI-Code",
-            "D is sending you from sdk....",
-            "Published Story",
-            "Book is published successgully....!",
-            3, //this is the notificationType
-            "", // a url for users to be redirected to
-            "",// an image url, or an empty string
-            null, //this can be left as null
-        );
-        console.log({
-            response,
-            message: "Your notification has been sucesfully sent"
-        });
-    }
+
+    // notification-----EPNS-----
+
+    // async function SendtoEPNS() {
+
+    //     // const response = await EpnsAPI.payloads.sendNotification({
+    //     //     signer,
+    //     //     type: 3, // target
+    //     //     identityType: 2, // direct payload
+    //     //     notification: {
+    //     //         title: `${AuthorName} Publish Story!`,
+    //     //         body: `Published ${name} - Story successfully...!!`,
+
+    //     //     },
+    //     //     payload: {
+    //     //         title: `${AuthorName} Publish Story!`,
+    //     //         body: `Published ${name} -  Story successfully...!!`,
+    //     //         cta: '',
+    //     //         img: ''
+    //     //     },
+    //     //     recipients: `eip155:80001: ${Curruntuser}`,
+
+    //     //     // recipient address
+
+    //     //     channel: 'eip155:80001:0x0630ba2dE07892EA340e9b9Bc07a35Ef3c4F5F9B', // your channel address
+    //     //     env: 'staging'
+    //     // });
+    //     // console.log({
+    //     //     response,
+    //     //     message: "Your notification has been sucesfully sent"
+    //     // });
+    // }
 
     // notification-----EPNS-----
 
@@ -157,14 +161,46 @@ function UploadForm() {
     }
     console.log(Item);
 
+
+
     async function onFormSubmit(e) {
         e.preventDefault()
         setLoading(true)
         await storeFiles(Item)
-        await SendtoEPNS()
+
+        // notification-----EPNS-----
+
+        const response = await EpnsAPI.payloads.sendNotification({
+            signer,
+            type: 3, // target
+            identityType: 2, // direct payload
+            notification: {
+                title: `${AuthorName} Publish Story!`,
+                body: `Published ${name} - Story successfully...!!`,
 
 
-        // addData();
+            },
+            payload: {
+                title: `${AuthorName} Publish Story!`,
+                body: `Published ${name} -  Story successfully...!!`,
+                cta: '',
+                img: ''
+            },
+            recipients: `eip155:80001:${user && user?.attributes?.ethAddress}`,
+
+            // recipient address
+
+            channel: 'eip155:80001:0x0630ba2dE07892EA340e9b9Bc07a35Ef3c4F5F9B', // your channel address
+            env: 'staging'
+        });
+        console.log({
+            response,
+            message: "Your notification has been sucesfully sent"
+        });
+
+        // notification-----EPNS-----
+
+
         setAuthorName('');
         setName('');
         setCategory('');
@@ -179,7 +215,8 @@ function UploadForm() {
         setToken('')
         setNFTHolder('')
         setNonNFTHolder('')
-        // notify();
+         
+
         setLoading(false)
 
     }
