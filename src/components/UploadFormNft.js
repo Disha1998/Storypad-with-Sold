@@ -15,14 +15,15 @@ import "react-toastify/dist/ReactToastify.css";
 import * as EpnsAPI from "@epnsproject/sdk-restapi";
 import EpnsSDK from "@epnsproject/backend-sdk-staging";
 import { api, utils } from "@epnsproject/frontend-sdk-staging";
- 
+
 require("dotenv").config({ path: "./.env" });
 
 
 
 function UploadFormNft() {
   const { Moralis } = useMoralis();
-  
+
+  const { data, fetch } = useMoralisQuery("storyPadData");
 
 
 
@@ -33,8 +34,8 @@ function UploadFormNft() {
   const [tokenPrice, setTokenPrice] = useState("");
   const [tokenQuantity, setTokenQuantity] = useState("");
   const [loading, setLoading] = useState(false);
+  const [AllTokenIds, setAllTokenIds] = useState()
 
-  
   const API_Token = process.env.REACT_APP_API_TOKEN;
   const client = new Web3Storage({ token: API_Token })
 
@@ -108,7 +109,7 @@ function UploadFormNft() {
     const svgBuffer = Buffer.from(svgElement);
     return svgBuffer;
   };
-   const currentUserAdd = localStorage.getItem("currentUserAddress");
+  const currentUserAdd = localStorage.getItem("currentUserAddress");
   async function onFormSubmit(e) {
 
     e.preventDefault();
@@ -139,7 +140,7 @@ function UploadFormNft() {
     if (txc) {
       setLoading(false);
       console.log(txc, "Successfully created!");
-     
+
     }
     let event = txc.events[0];
     console.log(event, "Event");
@@ -149,8 +150,8 @@ function UploadFormNft() {
     nftData.set("tokenContractAddress", tokenContractAddress);
     nftData.set("CurrentUser", userAdd);
     //let userAdd = event.args[0]
-  
-     
+
+
     setLoading(true);
 
     let transactionBulkMint = await storyMintContract.bulkMintERC721(
@@ -163,28 +164,28 @@ function UploadFormNft() {
 
     let txb = await transactionBulkMint.wait();
     if (txb) {
-      try{
+      try {
         const PK = process.env.REACT_APP_EPNS_PRIVATE_KEY;
         const Pkey = `0x${PK}`;
         const epnsSdk = new EpnsSDK(Pkey)
-        console.log(epnsSdk,"epnsSDK");
-          const txEPNS = await epnsSdk.sendNotification(
-            userAdd,
-            "Hey there",
-            "Welcome to the storypad" ,
-            `${authorname} Created NFT`,
-            ` Uploaded collection of ${symbol} NFTs successfully!`,
-            3, //this is the notificationType
-            '', // a url for users to be redirected to
-            '' ,// an image url, or an empty string
-            null, //this can be left as null
-          );
-          console.log(txEPNS, "txEPNS");
-      }catch(error){
-console.log(error.response.data,"error.response.data");
+        console.log(epnsSdk, "epnsSDK");
+        const txEPNS = await epnsSdk.sendNotification(
+          userAdd,
+          "Hey there",
+          "Welcome to the storypad",
+          `${authorname} Created NFT`,
+          ` Uploaded collection of ${symbol} NFTs successfully!`,
+          3, //this is the notificationType
+          '', // a url for users to be redirected to
+          '',// an image url, or an empty string
+          null, //this can be left as null
+        );
+        console.log(txEPNS, "txEPNS");
+      } catch (error) {
+        console.log(error.response.data, "error.response.data");
       }
-      
-          
+
+
       setLoading(false);
 
 
@@ -209,7 +210,7 @@ console.log(error.response.data,"error.response.data");
       console.log(ipfsHash, "ipfsHash from addDataToIPFS function");
 
       const imageUrl = `https://ipfs.io/ipfs/${ipfsHash}`;
-      imageArr.push({ imageUrl: imageUrl, tokenId: tokenId.toString(),sold:false });
+      imageArr.push({ imageUrl: imageUrl, tokenId: tokenId.toString(), sold: false });
       console.log(imageArr, "imageArr");
       const blob = new Blob(
 
@@ -267,6 +268,30 @@ console.log(error.response.data,"error.response.data");
   };
 
   // const notify = () => toast("NFTs are uploaded!");
+
+  useEffect(() => {
+
+
+    // data.map((obj) => {
+
+    //   axios.get(`https://api.covalenthq.com/v1/80001/tokens/${obj.attributes.tokenContractAddress}/nft_token_ids/?key=ckey_326b5347eff049c69bc901fc77a`)
+
+    //     .then((response) => {
+    //       // console.log('response--------', response);
+
+    //       let Items = response.data.data.items;
+    //       console.log('Items---', Items);
+
+    //       // setAllTokenIds(Items)
+
+    //       // console.log(response.data.data.items, "response================");
+
+    //     })
+
+    // })
+    // console.log('AllTokenIds====',AllTokenIds);
+
+  })
 
   return (
     <div

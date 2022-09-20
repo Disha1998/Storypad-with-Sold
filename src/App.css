@@ -522,14 +522,17 @@ div .review-section {
   justify-content: space-between;
   align-items: center;
 }
+
 .footer-top {
   min-height: calc(100vh - 34px);
 }
+
 .footer-fix {
   position: relative;
   left: 0;
   bottom: 0
 }
+
 #footer {
   position: relative;
   left: 0;
@@ -1113,4 +1116,17 @@ body {
 .toolbar-class {
   border: 1px solid #ccc;
   width: 28vw;
+}
+
+
+/* Unstopable --------- */
+
+.log-title {
+  margin-left: 10px;
+  margin-top: 13px;
+  color: gray;
+}
+
+.log-title:hover {
+  color: #222;
 }

@@ -8,6 +8,8 @@ import ContractABI from "../../abi/mintContractParent.json";
 import ContractChildABI from "../../abi/mintContract.json";
 import { ethers } from "ethers";
 import web3 from "web3";
+import axios from "axios";
+
 import EpnsSDK from "@epnsproject/backend-sdk-staging";
 
 function NftReadershipDetail({ symbol }) {
@@ -22,6 +24,33 @@ function NftReadershipDetail({ symbol }) {
   const [authorData, setAuthorData] = useState();
   const [authorNAME, setAuthorName] = useState();
   const getSoldData = Moralis.Object.extend("soldItems");
+  const [AllTokenIds, setAllTokenIds] = useState()
+
+
+
+
+  // -------covalent API -----------------
+  useEffect(() => {
+    axios.get(`https://api.covalenthq.com/v1/80001/tokens/${address}/nft_token_ids/?key=ckey_326b5347eff049c69bc901fc77a`)
+
+      .then((response) => {
+ 
+        let Items = response.data.data.items;
+        console.log('Items---', Items);
+
+        Items.map((itemm) => {
+          axios.get(`https://api.covalenthq.com/v1/80001/tokens/${address}/nft_metadata/${itemm.token_id}/?key=ckey_326b5347eff049c69bc901fc77a`).then((response) => {
+            // console.log('response-==-==',response);
+            let Metadata = response.data.data.items;
+            console.log('Metadata---', Metadata);
+          })
+        })
+        setAllTokenIds(Items)
+      })
+  }, [])
+
+
+  // -------covalent API -----------------
 
 
   const solditems = new getSoldData();
@@ -33,7 +62,7 @@ function NftReadershipDetail({ symbol }) {
     const getAuthorCollection = async () => {
       const storyPad = Moralis.Object.extend("nftMetadata");
       const query = new Moralis.Query(storyPad);
-      query.equalTo("CurrentUser", address);
+      query.equalTo("tokenContractAddress", address);
       const objects = await query.find()
 
 
@@ -135,6 +164,10 @@ function NftReadershipDetail({ symbol }) {
     }
 
   }
+
+
+
+
   return (
     // console.log(obj.attributes.authorName,"obj")
     <div style={{ marginBottom: "0px" }} className="app-container">
@@ -148,6 +181,7 @@ function NftReadershipDetail({ symbol }) {
                 </div>
                 <div className="badges">
                   <h1 className="profile-name h3">{obj[0].attributes.authorName}</h1>
+                  <h5>{AllTokenIds?.length}  NFTs</h5>
                 </div>
               </header>
             </div>

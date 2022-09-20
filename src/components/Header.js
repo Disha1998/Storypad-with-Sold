@@ -11,6 +11,10 @@ import Typography from '@mui/material/Typography';
 import Button from '@mui/material/Button';
 import { api, utils } from "@epnsproject/frontend-sdk-staging";
 import BellIcon from 'react-bell-icon';
+import UAuth from '@uauth/js'
+// import { WorldIDWidget, WidgetProps } from "@worldcoin/id";
+import { WorldIDWidget, WidgetProps } from "@worldcoin/id";
+
 
 
 
@@ -18,6 +22,7 @@ function Header() {
   const notify = () => toast("You are logged in!");
   const [loading, setLoading] = useState(false);
   const [smShow, setSmShow] = useState(false);
+  const [value, setValue] = useState();
 
   // const [notificationItems, setNotificationItems] = useState([]);
   const bookContext = React.useContext(BookContext);
@@ -45,7 +50,92 @@ function Header() {
   const open = Boolean(anchorEl);
   const id = open ? 'simple-popover' : undefined;
 
-  // 
+  //-------------- WorldCoin ----------------------------
+
+
+  // <WorldIDWidget
+  //   actionId="wid_staging_76474f51ceeaf9c0730fae2c659f637b" // obtain this from developer.worldcoin.org
+  //   signal="user-id-1"
+  //   enableTelemetry
+  //   appName="candyApp"
+  //   signalDescription="Receive initial airdrop April 2022"
+  //   theme="light"
+  //   // debug={true} // DO NOT SET TO `true` IN PRODUCTION
+  //   onSuccess={(result) => console.log(result)}
+  //   onError={({ code, detail }) => console.log({ code, detail })}
+  //   onInitSuccess={() => console.log("Init successful")}
+  //   onInitError={(error) => console.log("Error while initialization World ID", error)}
+  // // onSuccess={(verificationResponse) => console.log(verificationResponse)} // you'll actually want to pass the proof to the API or your smart contract
+  // // onError={(error) => console.error(error)}
+  // />;
+
+
+
+  // const widgetProps = {
+  //   actionId: "wid_staging_76474f51ceeaf9c0730fae2c659f637b",
+  //   signal: "user-id-1",
+  //   enableTelemetry: true,
+  //   appName: "candyApp",
+  //   signalDescription: "Receive initial airdrop April 2022",
+  //   theme: "light",
+  //   debug: true, // DO NOT SET TO `true` IN PRODUCTION
+  //   onSuccess: (result) => console.log(result),
+  //   onError: ({ code, detail }) => console.log({ code, detail }),
+  //   onInitSuccess: () => console.log("Init successful"),
+  //   onInitError: (error) => console.log("Error while initialization World ID", error),
+  // };
+
+
+
+  //-------------- WorldCoin ----------------------------
+
+
+
+  //-------------- Unstoable Domain ----------------------------
+
+  const unClient = new UAuth({
+    clientID: "19ab2131-2b54-4e4e-b4d5-761715826c39",
+    redirectUri: "http://localhost:3000",
+    scope: "openid wallet"
+  })
+  async function inlog() {
+
+    try {
+
+      const authorization = await unClient.loginWithPopup();
+
+      console.log(authorization);
+
+      await localStorage.setItem("domain", authorization.idToken.sub)
+
+      console.log(localStorage.getItem("domain"));
+
+      const walletAddress = authorization.idToken.wallet_address;
+
+      localStorage.setItem("currentUserAddress", walletAddress)
+
+      refresh();
+
+    } catch (error) {
+
+      console.log(error);
+
+    }
+
+  }
+  async function out() {
+    await unClient.logout();
+    console.log('Logged out with Unstoppable');
+  }
+
+  const refresh = () => {
+    // re-renders the component
+    setValue({});
+  }
+
+
+  //-------------- Unstoable Domain ----------------------------
+
 
   // ----Fetch notification from EPNS ------ 
   const [notificationItems, setNotificationItems] = useState([]);
@@ -73,7 +163,7 @@ function Header() {
 
   }
 
-  console.log('notificationItems=====', notificationItems);
+  // console.log('notificationItems=====', notificationItems);
 
 
 
@@ -133,6 +223,26 @@ function Header() {
             <ToastContainer />
 
           </button>
+
+
+          {
+            localStorage.getItem("domain") !== null ? (
+              <small className="log-title">{localStorage.getItem("domain")}</small>
+            ) : (
+              <button style={{
+                backgroundColor: '#D82148',
+                color: 'white',
+                fontWeight: '20px',
+                border: '2px solid #D82148',
+                marginLeft: '10px',
+                borderRadius: '7%',
+                padding: "auto",
+                width: "60px"
+              }} onClick={inlog}>Login</button>
+            )
+          }
+
+
 
 
           {/* <Link to=" "> */}
@@ -203,6 +313,24 @@ function Header() {
           {/* <BellIcon width='40' active={true} animate={true} /> */}
           {/* </div> */}
           {/* </Link> */}
+
+        </div>
+        <div>
+          {/* <WorldIDWidget WidgetProps = {widgetProps} /> */}
+
+          <WorldIDWidget
+            actionId="wid_staging_76474f51ceeaf9c0730fae2c659f637b" // obtain this  
+            signal="user-id-1"
+            enableTelemetry='false'
+            appName="candyApp"
+            signalDescription="Receive initial airdrop April 2022"
+            theme="light"
+            debug='true' // DO NOT SET TO `true` IN PRODUCTION
+            onSuccess={(result) => console.log(result)}
+            onError={({ code, detail }) => console.log({ code, detail })}
+            onInitSuccess={() => console.log("Init successful")}
+            onInitError={(error) => console.log("Error while initialization World ID", error)} />
+
 
         </div>
 

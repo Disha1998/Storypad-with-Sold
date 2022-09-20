@@ -33,7 +33,7 @@ export default function Notification() {
     }
     // fetchNotifications();
 
-    console.log('notificationItems=====', notificationItems);
+    // console.log('notificationItems=====', notificationItems);
 
     notificationItems.map((notific) => {
         return <h1>{notific.url}</h1>

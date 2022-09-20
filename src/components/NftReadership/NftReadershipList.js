@@ -20,7 +20,7 @@ function NftReadership() {
           return (
             <div className="col-md-3 col-sm-6">
               <li key={obj.attributes.imageArr[0].tokenId}>
-                <Link to={`/readership-nft-detail/${obj.attributes.CurrentUser}`}>
+                <Link to={`/readership-nft-detail/${obj?.attributes.tokenContractAddress}`}>
                   <div className="card-readership card-block">
                     <h4 className="card-title-readership text-right"></h4>
                     <img
