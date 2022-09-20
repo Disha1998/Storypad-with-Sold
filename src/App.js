@@ -15,7 +15,6 @@ import Footer from './components/Footer';
 // import NewsDetail from './components/DetailsPage/NewsDetail';
 // import WebsiteDetail from './components/DetailsPage/WebsiteDetail';
 import Profile from './components/Profile/Profile';
-import Notification from './Context/Notification';
 
 import UploadFormNft from './components/UploadFormNft';
 //Listing
@@ -47,13 +46,14 @@ import FanfictionDetail from './components/DetailsPage/StoryDetail/FanfictionDet
 
 import NftReadership from './components/NftReadership/NftReadershipList'
 import NftReadershipDetail from './components/NftReadershipDetail/NftReadershipDetail'
-// import Notification from './Context/Notification';
+import ChatBox from './ChatBox';
 
 
 function App() {
   return (
     <div className="App">
       <Header />
+      {/* <ChatBox /> */}
       <Routes>
         <Route path="/" element={<Home />} />
         <Route path="/upload-form" element={<UploadForm />} />
@@ -68,7 +68,9 @@ function App() {
         <Route path="/newspapers-list" element={<NewspaperList />} />
         <Route path="/websites-list" element={<WebsiteList />} /> */}
         <Route path="/profile" element={<Profile />} />
-        <Route path="/notification" element={<Notification />} />
+        <Route path="/chatbox" element={<ChatBox />} />
+
+        {/* <Route path="/notification" element={<Notification />} /> */}
 
         <Route path="/nft-upload" element={<UploadFormNft />} />
 
@@ -106,8 +108,9 @@ function App() {
         <Route path="/readership-nft" element={<NftReadership />} />
         {/* <Route path="/readership-nft-detail" element={<NftReadershipDetail />} /> */}
         <Route path="/readership-nft-detail/:address" element={<NftReadershipDetail />} />
- 
+
       </Routes>
+
       <Footer />
       {/* <BookList></BookList> */}
       {/* <BookDetail></BookDetail> */}

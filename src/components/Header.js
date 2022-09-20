@@ -299,14 +299,22 @@ function Header() {
           </div>
           {/* </Link> */}
 
-          <Link to="profile">
+
+          <Link to="chatbox">
 
             <div style={{ marginRight: "30px", marginLeft: "30px", padding: "auto" }}>
-              <Avatar size={40} round="50px" src="https://www.pinpng.com/pngs/m/615-6154495_avatar-png-icon-business-woman-icon-vector-transparent.png" />
+              <Avatar size={40} round="50px" src="https://cdn.iconscout.com/icon/free/png-256/chat-2639493-2187526.png" />
 
             </div>
           </Link>
 
+          <Link to="profile">
+
+            <div style={{ marginRight: "10px", marginLeft: "10px", padding: "auto" }}>
+              <Avatar size={40} round="50px" src="https://www.pinpng.com/pngs/m/615-6154495_avatar-png-icon-business-woman-icon-vector-transparent.png" />
+
+            </div>
+          </Link>
           {/* <Link to="notification"> */}
 
           {/* <div style={{ marginRight: "30px", marginLeft: "30px", padding: "auto" }}> */}

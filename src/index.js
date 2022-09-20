@@ -8,6 +8,8 @@ import { MoralisProvider } from 'react-moralis';
 import { BrowserRouter } from 'react-router-dom';
 import { BookContextProvider } from './Context/BookContext';
 import 'react-toastify/dist/ReactToastify.css';
+import { ChatBoxContextProvider } from './Context/ChatBoxContext';
+
 
 
 // const root = ReactDOM.createRoot(document.getElementById("root"));
@@ -19,10 +21,12 @@ ReactDOM.render(
   <MoralisProvider appId={process.env.REACT_APP_MORALIS_KEY} serverUrl={process.env.REACT_APP_MORALIS_SERVER}>
     <BookContextProvider>
       <BrowserRouter>
+      <ChatBoxContextProvider>
         <React.StrictMode>
 
           <App />
         </React.StrictMode>
+        </ChatBoxContextProvider>
 
       </BrowserRouter>
     </BookContextProvider>

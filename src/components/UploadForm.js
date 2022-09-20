@@ -12,7 +12,6 @@ import { EditorState, convertToRaw, ContentState } from 'draft-js';
 // import RichTextEditor from 'react-rte';
 import { ToastContainer, toast } from 'react-toastify';
 import "react-toastify/dist/ReactToastify.css";
-import { NotificationContext } from '../Context/Notification'
 import EpnsSDK from "@epnsproject/backend-sdk-staging"
 import * as EpnsAPI from "@epnsproject/sdk-restapi"
 import { ethers } from 'ethers'
