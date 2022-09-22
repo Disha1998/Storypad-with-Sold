@@ -302,8 +302,15 @@ function Header() {
 
           <Link to="chatbox">
 
-            <div style={{ marginRight: "30px", marginLeft: "30px", padding: "auto" }}>
+            <div style={{ marginRight: "10px", marginLeft: "10px", padding: "auto" }}>
               <Avatar size={40} round="50px" src="https://cdn.iconscout.com/icon/free/png-256/chat-2639493-2187526.png" />
+
+            </div>
+          </Link>
+          <Link to="livepeer">
+
+            <div style={{ marginRight: "10px", marginLeft: "10px", padding: "auto" }}>
+              <Avatar size={40} round="50px" src="https://img.freepik.com/premium-vector/live-stream-logo-live-streaming-icon-live-broadcasting-button_349999-639.jpg" />
 
             </div>
           </Link>

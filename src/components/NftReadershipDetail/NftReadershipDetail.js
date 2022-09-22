@@ -26,15 +26,12 @@ function NftReadershipDetail({ symbol }) {
   const getSoldData = Moralis.Object.extend("soldItems");
   const [AllTokenIds, setAllTokenIds] = useState()
 
-
-
-
   // -------covalent API -----------------
   useEffect(() => {
     axios.get(`https://api.covalenthq.com/v1/80001/tokens/${address}/nft_token_ids/?key=ckey_326b5347eff049c69bc901fc77a`)
 
       .then((response) => {
- 
+
         let Items = response.data.data.items;
         console.log('Items---', Items);
 

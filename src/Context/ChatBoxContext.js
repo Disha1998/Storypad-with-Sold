@@ -22,29 +22,29 @@ export const ChatBoxContextProvider = (props) => {
     const [updateMessage, setUpdateMessage] = useState(false);
 
 
-    useEffect(() => {
-        async function connectWallet() {
-            // localStorage.getItem("currentUserAddress");
-            setLoading(true)
-            const web3Modal = new Web3Modal();
-            const connection = await web3Modal.connect();
-            const provider = new ethers.providers.Web3Provider(connection);
-            const signer = provider.getSigner();
-            const usr = signer.getAddress(); 
-            if(usr){
-                usr.then((res)=>{ 
-                   setCurrentUser(res); 
-                })
-            } 
-            setSigner(signer);
-            const xmtp = await Client.create(signer);
-            setXmtp(xmtp);
-            const list = await xmtp.conversations.list();
-            setUserList(list);
-            setLoading(false)
-        }
-        connectWallet();
-    }, [isUpdate])
+    // useEffect(() => {
+    //     async function connectWallet() {
+    //         // localStorage.getItem("currentUserAddress");
+    //         setLoading(true)
+    //         const web3Modal = new Web3Modal();
+    //         const connection = await web3Modal.connect();
+    //         const provider = new ethers.providers.Web3Provider(connection);
+    //         const signer = provider.getSigner();
+    //         const usr = signer.getAddress(); 
+    //         if(usr){
+    //             usr.then((res)=>{ 
+    //                setCurrentUser(res); 
+    //             })
+    //         } 
+    //         setSigner(signer);
+    //         const xmtp = await Client.create(signer);
+    //         setXmtp(xmtp);
+    //         const list = await xmtp.conversations.list();
+    //         setUserList(list);
+    //         setLoading(false)
+    //     }
+    //     connectWallet();
+    // }, [isUpdate])
 
     useEffect(() => {
         const getConvo = async () => {

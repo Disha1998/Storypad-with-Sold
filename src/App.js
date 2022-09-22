@@ -3,17 +3,9 @@ import logo from './logo.svg';
 import './App.css';
 import Home from './components/Home';
 import UploadForm from './components/UploadForm';
-// import BookList from './components/ListingPage/BookList';
-// import BookDetail from './components/DetailsPage/BookDetail';
-// import DocumentList from './components/ListingPage/DocumentList';
-// import NewspaperList from './components/ListingPage/NewspaperList'
 import { Routes, Route } from 'react-router-dom';
 import Header from './components/Header';
 import Footer from './components/Footer';
-// import WebsiteList from './components/ListingPage/WebsitesList';
-// import DocumentDetail from './components/DetailsPage/DocumentDetail';
-// import NewsDetail from './components/DetailsPage/NewsDetail';
-// import WebsiteDetail from './components/DetailsPage/WebsiteDetail';
 import Profile from './components/Profile/Profile';
 
 import UploadFormNft from './components/UploadFormNft';
@@ -47,31 +39,21 @@ import FanfictionDetail from './components/DetailsPage/StoryDetail/FanfictionDet
 import NftReadership from './components/NftReadership/NftReadershipList'
 import NftReadershipDetail from './components/NftReadershipDetail/NftReadershipDetail'
 import ChatBox from './ChatBox';
+import Livepeer from './components/Livepeer/Livepeer';
 
 
 function App() {
   return (
     <div className="App">
       <Header />
-      {/* <ChatBox /> */}
       <Routes>
         <Route path="/" element={<Home />} />
         <Route path="/upload-form" element={<UploadForm />} />
-
-        {/* <Route path="/book-detail/:id" element={<BookDetail />} /> */}
-
-        {/* <Route path="/doc-detail/:id" element={<DocumentDetail />} />
-        <Route path="/news-detail/:id" element={<NewsDetail />} />
-        <Route path="/web-detail/:id" element={<WebsiteDetail />} />
-        <Route path="/book-list" element={<BookList />} />
-        <Route path="/documents-list" element={<DocumentList />} />
-        <Route path="/newspapers-list" element={<NewspaperList />} />
-        <Route path="/websites-list" element={<WebsiteList />} /> */}
+ 
         <Route path="/profile" element={<Profile />} />
         <Route path="/chatbox" element={<ChatBox />} />
-
-        {/* <Route path="/notification" element={<Notification />} /> */}
-
+        <Route path="/livepeer" element={<Livepeer />} />
+ 
         <Route path="/nft-upload" element={<UploadFormNft />} />
 
         {/* Storypad List */}
@@ -90,8 +72,7 @@ function App() {
 
 
         {/* Storypad Detail */}
-
-
+ 
         <Route path="/fantasy-detail/:id" element={<HorrorDetail />} />
         <Route path="/historical-detail/:id" element={<HistoricalDetail />} />
         <Route path="/horror-detail/:id" element={<HorrorDetail />} />
@@ -106,14 +87,13 @@ function App() {
         <Route path="/fanfiction-detail/:id" element={<FanfictionDetail />} />
 
         <Route path="/readership-nft" element={<NftReadership />} />
-        {/* <Route path="/readership-nft-detail" element={<NftReadershipDetail />} /> */}
+
         <Route path="/readership-nft-detail/:address" element={<NftReadershipDetail />} />
 
       </Routes>
 
       <Footer />
-      {/* <BookList></BookList> */}
-      {/* <BookDetail></BookDetail> */}
+
     </div>
   );
 }
