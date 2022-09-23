@@ -1,40 +1,46 @@
 import { Client, isSupported } from '@livepeer/webrtmp-sdk'
-import React, { useState } from 'react'
+import React, { useState, useRef, useEffect } from 'react'
 
 
 export default function Livepeer() {
 
-    // const [streamshare, setStreamshare] = useState()
-    // const [video, setvideo] = useState()
+    const inputEl = useRef(null)
+    const videoEl = useRef(null)
+    const stream = useRef(null)
 
+    useEffect(() => {
+        ; (async () => {
+            videoEl.current.volume = 0
 
-    // const streaminputEvent = (e) => {
-    //     setStreamshare(e.target.value);
-    // }
-    // console.log(streamshare, 'streamshare===');
- 
+            stream.current = await navigator.mediaDevices.getUserMedia({
+                video: true,
+                audio: true,
+            })
 
-    if (!isSupported()) {
-        alert('webrtmp-sdk is not currently supported on this browser')
-    }
+            videoEl.current.srcObject = stream.current
+            videoEl.current.play()
+        })()
+    })
 
+    const onButtonClick = async () => {
+        const streamKey = inputEl.current.value
 
-    async function start() {
-         
+        if (!stream.current) {
+            alert('Video stream was not started.')
+        }
+
+        if (!streamKey) {
+            alert('Invalid streamKey.')
+            return
+        }
+
         const client = new Client()
-        const streamKey = '534b-03fx-ak1m-39zq'
 
-        const stream = await navigator.mediaDevices.getUserMedia({
-            
-            video: true,
-            audio: true
-
-        })
-
-        const session = client.cast(stream, streamKey)
+        const session = client.cast(stream.current, streamKey)
 
         session.on('open', () => {
-             console.log('Stream started.')
+            console.log('Stream started.')
+            alert('Stream started; visit Livepeer Dashboard.')
         })
 
         session.on('close', () => {
@@ -45,19 +51,22 @@ export default function Livepeer() {
             console.log('Stream error.', err.message)
         })
     }
-
-    // start();
+ 
     return (
         <>
-            <div className='container footer-top'>
-                <div id="roott">
-                    {/* <input id="input" placeholder="Enter streamKey"></input> */}
-                    <video id="video"></video>
-                    <button id="button" onClick={start()} >Start</button>
-                </div>
-                {/* <script src="index.js"></script> */}
+            <div className="App footer-top"  id="roott">
+                <input
+                    id="input"
+                    className="App-input"
+                    ref={inputEl}
+                    type="text"
+                    placeholder="streamKey"
+                />
+                <video id="video" className="App-video" ref={videoEl} />
+                <button id="button" className="App-button" onClick={onButtonClick}>
+                    Start
+                </button>
             </div>
- 
         </>
     )
 }
